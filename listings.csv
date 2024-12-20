@@ -1,0 +1,12 @@
+﻿lat,long,url,address,priority_zone,MLS,price,bed,bath,sqft,year,garage,color,type
+43.617358,-116.215944,https://www.redfin.com/ID/Boise/1514-W-River-St-83702/unit-206/home/172683086,1514 W River St #206,1,98926285,539000,3,2,1412,2020,Y,red,condo
+43.570094,-116.183151,https://www.redfin.com/ID/Boise/3559-S-Gekeler-Ln-83706/unit-100/home/106683897,3559 S Gekeler Ln #100,2,98927215,329000,2,2,1027,1989,N,blue,condo
+43.615625,-116.212435,https://www.redfin.com/ID/Boise/412-S-13th-St-83702/unit-118/home/106802131,412 S 13th St #118 St,1,98931490,519000,1,1.5,945,2007,Y,red,condo
+43.62255,-116.212183,https://www.redfin.com/ID/Boise/1620-W-Bannock-St-83702/unit-203/home/187400132,1620 W Bannock St #203,1,98925364,549900,1,1,864,2023,N,red,condo
+43.61515,-116.19635,https://www.redfin.com/ID/Boise/323-W-Jefferson-St-83702/unit-502/home/106788853,323 W Jefferson St #502,1,98928806,449900,1,1,690,2009,N,red,condo
+43.626272,-116.209104,https://www.redfin.com/ID/Boise/707-N-17th-St-83702/home/175925975,707 N 17th St,2,98930571,498000,3,2,1738,1940,Y,blue,condo
+43.646718,-116.247359,https://www.redfin.com/ID/Boise/2922-N-Saint-James-Pl-83703/home/106653811,2922 N Saint James Pl,2,98923596,389000,3,2.5,1330,2005,Y,blue,townhome
+43.5810192,-116.1960056,https://www.redfin.com/ID/Boise/1156-W-Ivywild-St-83706/home/185805794,1156 W Ivywild St,2,98930356,429900,3,2.5,1440,2023,Y,blue,townhome
+43.5810203,-116.1963601,https://www.redfin.com/ID/Boise/1224-W-Ivywild-St-83706/home/186477922,1224 W Ivywild,2,98927145,429900,3,2.5,1444,2023,Y,blue,townhome
+43.5865267,-116.203923,https://www.redfin.com/ID/Boise/1861-S-Annett-St-83705/home/106783347,1861 S Annett St,2,98931575,427500,3,2.5,1546,2001,Y,blue,townhome
+43.5512929,-116.1347729,https://www.redfin.com/ID/Boise/5605-S-Adonis-Pl-83716/home/106740807,5605 S Adonis Pl,3,98928066,364900,3,1.5,1306,1996,Y,green,townhome

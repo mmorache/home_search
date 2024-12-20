@@ -1,0 +1,177 @@
+---
+title: "House Search Analysis"
+format: html
+jupyter: python3
+execute:
+  echo: false 
+---
+
+## Overview
+
+I am seeking to purchase a condo or townhouse near downtown Boise. My budget is between $300 - $600K.
+
+
+### Timeline
+
+| Date | Action |
+| -- | -- |
+| January | Secure loan |
+| January - March | Purchase condo / townhouse |
+| April | Place estate property on market |
+| May - June | Sell estate property / pay off loan |
+
+
+<br>
+
+## Criteria
+
+### Home Type
+
+I have two ideas in mind. Based on what I can afford within my criteria, the second type is more feasible. However, I'd still like to check out the first type just to get a sense before I exclude it completely. 
+
+1. **Concrete construction high-rise**: A 4-level or higher building in the downtown area constructed from concrete.
+
+1. **Townhouse**: Farther away but with more space, more affordable, and possibly with a garage.
+
+<br>
+
+### Location 
+
+I am most interested in the following areas, ranked in order of preference. In general, I would like to live close to downtown.
+
+| Priority | Area | Pros | Cons |
+| -- | ----- | ----- | ----- |
+| 1 | Downtown | Optimal Location |  More expensive, likely smaller, likely no garage |
+| 2 | South Boise (Broadway), Bench along rim, Garden City near river | Bikeable, reasonably close to downtown | Quality of commute depends on proximity to Greenbelt access | 
+| 3 | South East Boise, further down State St. |  Nature access | Longer commute, less bikeable, less going on, some better prices |
+
+<br>
+
+### Preferences
+
+Some general considerations. I would prefer:
+
+* **At least two bedrooms**. However, depending on the layout and sqft of the place, a 1-bedroom unit might work as well, particularly with a loft, so I don't want to exclude this category outright.
+
+* **Between 900 - 1,300 sqft**, but depending on the layout, this is flexible.
+
+* **Multiple levels** instead of a single-level design.
+
+<br>
+
+#### Primary
+
+These are the main criteria that I am seeking:
+
+| Preference | Reason |
+| --- | ------ |
+| Condo or Townhouse | Low maintenance |
+| Proximity to downtown | Prefer urban environment over suburbs |
+| Bikeability / walkability | Prefer to limit driving |
+| Cat Friendly | Need to accommodate four indoor-only cats; No HOA restrictions, sufficient space, safe design so they won't inadvertently get let outside |
+| Noise (internal) | Having lived in a 2x4 framed condo with noise from neighbors above and complaints from neighbors below, I want to be able to walk around and do normal activities without this stress |
+
+<br>
+
+#### Secondary
+
+These are the secondary criteria that I am seeking:
+
+| Preference | Reason |
+| ---------- | ------ |
+| Garage | Additional storage, safe place to park car |
+| Laminate flooring, not carpet | More hygienic, easier to clean, aesthetic appeal |
+| No or few amenities (no pools, gyms, common areas, etc.) | Lower HOA fees |
+| Newer construction (approximately last 20 years) | Generally more efficient layouts |
+| Not directly accessible from street | Prevents cats from door dashing |
+| View | Aesthetic appeal |
+
+<br>
+
+### Possible Listings
+
+The following interactive map display listings I am interested in, grouped by priority zone. The downtown listings are likely not as feasible but at this point I have not excluded them entirely.
+
+Click on a marker to access the Redfin profile.
+
+```{python, echo = False}
+import csv
+from shapely.wkt import loads as wkt_loads
+from ipyleaflet import Map, Polygon, Marker, Popup, Icon
+import ipywidgets as widgets
+import pandas as pd
+
+color_map = {
+    "Priority 1": "red",
+    "Priority 2": "blue",
+    "Priority 3": "green"
+}
+
+m = Map(center=(43.6150, -116.2023), zoom=12)
+
+with open("Areas.csv", newline="") as csvfile:
+    reader = csv.DictReader(csvfile)
+    for row in reader:
+        if row["WKT"]:
+            geometry = wkt_loads(row["WKT"]) 
+            if geometry.geom_type == "Polygon":
+                coordinates = [
+                    (lat, lon) for lon, lat in geometry.exterior.coords
+                ]
+                color = color_map.get(row["name"], "gray")
+                polygon = Polygon(
+                    locations=coordinates,
+                    color=color,
+                    fill_color=color, 
+                    fill_opacity=0.2,
+                    name=row["name"],
+                    weight=2 
+                )
+                m.add_layer(polygon)
+
+
+listings_df = pd.read_csv("listings.csv")
+listings_df['lat'] = pd.to_numeric(listings_df['lat'])
+listings_df['long'] = pd.to_numeric(listings_df['long'])
+listings_df['price'] = pd.to_numeric(listings_df['price'])
+listings_df['price'] = listings_df['price'].apply(lambda x: "${:,.0f}".format(x))
+listings_df['sqft'] = pd.to_numeric(listings_df['sqft'])
+listings_df['year'] = pd.to_numeric(listings_df['year'], errors='coerce') 
+for index, row in listings_df.iterrows():
+    location = (row['lat'], row['long'])
+    url = row['url']
+    link_text = f"{row['address']}"
+    message = f'<div><a href="{url}" target="_blank">{link_text}</a></div>'
+    html = widgets.HTML(value=message)
+    icon_url = f"http://maps.google.com/mapfiles/ms/icons/{row['color']}-dot.png"
+    icon = Icon(icon_url=icon_url, icon_size=[20, 20])
+    marker = Marker(location=location, icon=icon)
+    popup = Popup(
+        location=location,
+        child=html,       
+        close_button=False,
+        auto_close=False,
+        close_on_escape_key=False
+    )
+    marker.popup = popup
+    m.add_layer(marker)
+
+m
+```
+
+<br>
+
+These are the listings on the map with additional details.
+
+```{python, echo = False}
+
+from IPython.display import Markdown
+
+listings_df.drop(columns=["lat", "long"], inplace=True)
+
+listings_df["MLS"] = listings_df.apply(lambda row: f"[{row['MLS']}]({row['url']})", axis=1)
+
+listings_df.drop(columns=["url"], inplace=True)
+markdown_table = listings_df.to_markdown(index=False)
+Markdown(markdown_table)
+```
